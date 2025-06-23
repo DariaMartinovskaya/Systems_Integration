@@ -62,9 +62,14 @@ void handle_button() {
     if ((millis() - lastDebounceTime) > BUTTON_DEBOUNCE_DELAY) {
       buttonPressed = true;
       Serial.println("Button pressed - preparing to sleep...");
-      
-      digitalWrite(ledPin, LOW);
-      delay(1000);
+
+      // --- LED feedback before sleep ---
+      for (int i = 0; i < 3; i++) {
+        digitalWrite(ledPin, HIGH);
+        delay(300);
+        digitalWrite(ledPin, LOW);
+        delay(300);
+      }
       
       esp_sleep_enable_ext0_wakeup((gpio_num_t)buttonPin, 0);
       esp_deep_sleep_start();
@@ -146,6 +151,23 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
   pinMode(buttonPin, INPUT_PULLUP);
+
+  // --- LED feedback on power-up ---
+  Serial.println("Power detected - system starting...");
+  digitalWrite(ledPin, HIGH);  // Turn LED ON
+  delay(2000);                 // Stay ON for 2 seconds
+  digitalWrite(ledPin, LOW);   // Then OFF
+
+  // --- LED feedback on wake-up ---
+  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
+    Serial.println("Woke up from deep sleep.");
+    for (int i = 0; i < 3; i++) {
+      digitalWrite(ledPin, HIGH);
+      delay(200);
+      digitalWrite(ledPin, LOW);
+      delay(200);
+    }
+  }
 
   // Initial button check
   if (digitalRead(buttonPin) == LOW) {
