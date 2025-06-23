@@ -9,6 +9,7 @@ This ESP32-based system monitors:
 - Provides visual feedback via LED
 - Offers remote monitoring through web interface
 - Features low-power sleep mode
+- Provides LED signals for power-on, deep sleep entry, and wake-up
 
 ## 🛠 Hardware Setup
 | Component       | ESP32 Pin | Connection Notes          |
@@ -29,8 +30,10 @@ This ESP32-based system monitors:
   - Continuous MPU6050 motion/orientation tracking
   - Periodic DHT11 climate measurements
 - **Smart LED Control**:
-  - Activates on motion detection (threshold configurable)
-  - Activates when humidity > 80% OR (temp < 10°C OR > 25°C)
+  - LED turns on when motion is detected (configurable threshold)
+  - LED turns on when humidity > 80% OR temperature < 10°C or > 25°C
+  - LED briefly turns on at power-up (indicates ignition/power-on)
+  - LED flashes during deep sleep entry and wake-up to indicate state transitions
 - **Power Management**:
   - Deep sleep mode activated by button press
   - Wake-up from sleep via same button
@@ -41,14 +44,17 @@ This ESP32-based system monitors:
 
 ### 🔄 Workflow
 1. Initializes all sensors and WiFi connection
-2. Enters main loop:
-   - Reads all sensors
-   - Checks button state
-   - Controls LED based on conditions
-   - Handles web requests
-3. Sleep mode:
-   - Button press triggers deep sleep
-   - Button press wakes from sleep
+2. On startup:
+- LED briefly turns on to indicate ignition
+3. In main loop:
+- Reads sensor data
+- Checks button state
+- Controls LED based on motion and environmental conditions
+- Handles incoming web client requests
+4. On button press:
+- LED flashes, system enters deep sleep
+5. On wake-up:
+- LED flashes, system resumes normal operation
 
 ## 🚀 Getting Started
 ### Prerequisites
