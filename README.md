@@ -173,8 +173,12 @@ const char *topic_status = "esp32/status";
 ```
 
 5. Upload to ESP32
-6. Run Node-RED and observe MQTT messages
+6. Run Node-RED and Mosquitto
 ```
 node-red-start
 mosquitto_sub -t esp32/sensors -v
 ```
+7. 🎉 View live data:
+- In terminal via mosquitto_sub
+- In Node-RED dashboard (http://192.168.0.127:1880/ui)
+- At ESP32 IP /data
