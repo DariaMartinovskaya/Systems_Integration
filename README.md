@@ -174,3 +174,7 @@ const char *topic_status = "esp32/status";
 
 5. Upload to ESP32
 6. Run Node-RED and observe MQTT messages
+```
+node-red-start
+mosquitto_sub -t esp32/sensors -v
+```
