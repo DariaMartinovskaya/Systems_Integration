@@ -124,6 +124,12 @@ Charts for sensor values
 
 Text/status indicators
 
+#### Example of Node-Red flow:
+![Node_RED_Flow](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Node-Red-Scheme.png)
+
+#### Example of Node-Red UI dashboard:
+
+
 ### 🔄 Workflow
 1. ESP32 initializes sensors and connects to WiFi & MQTT
 2. On startup:
