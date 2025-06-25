@@ -1,4 +1,4 @@
-# ESP32-Raspberry Pi-Node-RED Motorcycle Motion Monitoring System
+# ESP32-Raspberry Pi-MQTT Broker-Node-RED Motorcycle Motion Monitoring System
 
 *A smart monitoring system with motion, climate sensing and web interface*
 
