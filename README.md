@@ -35,6 +35,7 @@ This ESP32-based system monitors:
 - **Smart LED Control**:
   - LED turns on when motion is detected (configurable threshold)
   - LED turns on when humidity > 80% OR temperature < 10°C or > 25°C
+  - LED turns on when motion is dangerous (AcX or GyX > threshold)
   - LED briefly turns on at power-up (indicates ignition/power-on)
   - LED flashes during deep sleep entry and wake-up to indicate state transitions
 - **Power Management**:
