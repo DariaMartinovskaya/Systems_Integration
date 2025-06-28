@@ -125,7 +125,7 @@ Charts for sensor values
 Text/status indicators
 
 #### Example of Node-Red flow:
-![Node_RED_Flow](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Node-Red-Scheme.png)
+![Node_RED_Flow](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Scheme.png)
 
 #### Example of Node-Red UI dashboard:
 ![Node_RED_UI](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Node_Red_UI.png)
