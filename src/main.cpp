@@ -97,10 +97,10 @@ void handle_button() {
     if ((millis() - lastDebounceTime) > BUTTON_DEBOUNCE_DELAY) {
       buttonPressed = true;
 
-      // Отправляем состояние перед сном
+      // Sending status before sleep
       client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
-      client.loop(); // Обеспечиваем отправку сообщения
-      delay(100); // Даем время на отправку
+      client.loop(); // Ensuring data sending
+      delay(100); // Giving time for sending
 
       Serial.println("Button pressed - preparing to sleep...");
       client.publish("esp32/button", "pressed");
@@ -118,7 +118,7 @@ void handle_button() {
   } else {
     buttonPressed = false;
     lastDebounceTime = millis();
-    client.publish("esp32/deepsleep", "AWAKE"); // Отправляем состояние "не в режиме сна"
+    client.publish("esp32/deepsleep", "AWAKE"); // Sending status "not in sleep"
   }
 }
 
@@ -126,27 +126,38 @@ void check_conditions() {
   float accelX = AcX / 16384.0;
   float gyroZ = GyZ / 131.0;
 
-  bool motionDetected = (fabs(accelX) > 1.0 || fabs(gyroZ) > 100.0);
+  bool motionDetected = (fabs(accelX) > 0.3 || fabs(gyroZ) > 50.0);
   bool tempHumCondition = (temperature < 10.0) || (temperature > 25.0) || (humidity > 80.0);
   bool ledState = motionDetected || tempHumCondition;
+
+  Serial.print("Motion: "); Serial.print(motionDetected);
+  Serial.print(" | Climate: "); Serial.println(tempHumCondition);
 
   //digitalWrite(ledPin, (motionDetected || tempHumCondition) ? HIGH : LOW);
   digitalWrite(ledPin, ledState ? HIGH : LOW);
 
-  if (tempHumCondition) {
-    Serial.println("Climate condition triggered!");
-    client.publish("climate/alert", "ALERT");
+  // Creating alert reason
+  String alertReason = "All normal";
+  if (ledState) {
+    alertReason = "";
+    if (motionDetected) alertReason += "Unsafe Motion detected";
+    if (tempHumCondition) {
+      if (alertReason.length() > 0) alertReason += " + ";
+      alertReason += "Climate alert";
+    }
   }
 
-  // Sending additional data for Node-RED
-  StaticJsonDocument<128> alertDoc;
-  alertDoc["led"] = ledState;
-  alertDoc["motion"] = motionDetected;
-  alertDoc["climateAlert"] = tempHumCondition;
-  
-  char alertBuffer[128];
-  serializeJson(alertDoc, alertBuffer);
-  client.publish("esp32/alerts", alertBuffer);
+  // Creating single message with all statuses
+  StaticJsonDocument<256> doc;
+  JsonObject state = doc.createNestedObject("state");
+  state["led"] = ledState;
+  state["motion"] = motionDetected;
+  state["climateAlert"] = tempHumCondition;
+  state["reason"] = alertReason;
+
+  char buffer[256];
+  serializeJson(doc, buffer);
+  client.publish("esp32/state", buffer);
 }
 
 void send_mqtt_data() {
@@ -222,12 +233,6 @@ void setup() {
   digitalWrite(ledPin, LOW);
   pinMode(buttonPin, INPUT_PULLUP);
 
-  // if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
-  //   for (int i = 0; i < 3; i++) {
-  //     digitalWrite(ledPin, HIGH); delay(200);
-  //     digitalWrite(ledPin, LOW); delay(200);
-  //   }
-  // }
   if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
     client.publish("esp32/deepsleep", "AWAKE (WOKE UP)");
   } else {
