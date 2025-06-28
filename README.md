@@ -28,6 +28,8 @@ This ESP32-based system monitors:
 | Button          | GPIO 2   | Other side to GND        |
 
 ## 📝 Code Functionality
+<a href="src/main.cpp">Source code.</a>
+
 ### Key Features
 - **Sensor Monitoring**:
   - Continuous MPU6050 motion/orientation tracking
@@ -124,7 +126,9 @@ Charts for sensor values
 
 Text/status indicators
 
-#### Example of Node-Red flow:
+#### Example of Node-Red flow
+<a href="Node-RED.json" target="_blank">Source code.</a>
+
 ![Node_RED_Flow](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Scheme.png)
 
 #### Example of Node-Red UI dashboard 
