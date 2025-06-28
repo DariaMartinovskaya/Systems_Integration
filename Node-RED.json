@@ -1,65 +1,79 @@
 [
     {
-        "id": "1a1f3aa7a2b6c51c",
+        "id": "6696cdd114230937",
+        "type": "tab",
+        "label": "Поток 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0f8c4bd190b00b41",
         "type": "mqtt in",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Sensor Data",
         "topic": "esp32/sensors",
         "qos": "0",
-        "datatype": "auto",
+        "datatype": "auto-detect",
         "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 140,
+        "inputs": 0,
+        "x": 120,
         "y": 80,
         "wires": [
             [
-                "c429c215d73f75d1",
-                "temp",
-                "hum",
-                "acc",
-                "gyro",
-                "btn"
+                "f1694e4594064e6d",
+                "aae85e4db72872fc",
+                "b0ed1ce0f45fdfdb",
+                "ac1bde61c6395c95",
+                "9dd4e151cac87031",
+                "ad800a591b8cb683",
+                "59990b94050959d1",
+                "5bedde620fe83f51",
+                "643072c6ed11983b",
+                "26aea8069137c52f",
+                "ee2b0d8f98a2e007"
             ]
         ]
     },
     {
-        "id": "c429c215d73f75d1",
+        "id": "f1694e4594064e6d",
         "type": "debug",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Full Sensor Data",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 370,
+        "x": 350,
         "y": 40,
         "wires": []
     },
     {
-        "id": "temp",
+        "id": "aae85e4db72872fc",
         "type": "function",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Temperature",
         "func": "return { payload: msg.payload.Temp };",
         "outputs": 1,
         "noerr": 0,
-        "x": 370,
+        "x": 350,
         "y": 80,
         "wires": [
             [
-                "tempGauge"
+                "9a8d70cd0bd6f53f"
             ]
         ]
     },
     {
-        "id": "tempGauge",
+        "id": "9a8d70cd0bd6f53f",
         "type": "ui_gauge",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Temp Gauge",
-        "group": "main",
+        "group": "609ae40c1738ada2",
         "order": 1,
         "width": 6,
         "height": 2,
@@ -69,32 +83,32 @@
         "format": "{{value}}",
         "min": 0,
         "max": 50,
-        "x": 600,
+        "x": 580,
         "y": 80,
         "wires": []
     },
     {
-        "id": "hum",
+        "id": "b0ed1ce0f45fdfdb",
         "type": "function",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Humidity",
         "func": "return { payload: msg.payload.Hum };",
         "outputs": 1,
         "noerr": 0,
-        "x": 370,
+        "x": 350,
         "y": 120,
         "wires": [
             [
-                "humGauge"
+                "aa67f7ea218c5ff1"
             ]
         ]
     },
     {
-        "id": "humGauge",
+        "id": "aa67f7ea218c5ff1",
         "type": "ui_gauge",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Humidity Gauge",
-        "group": "main",
+        "group": "609ae40c1738ada2",
         "order": 2,
         "width": 6,
         "height": 2,
@@ -104,32 +118,32 @@
         "format": "{{value}}",
         "min": 0,
         "max": 100,
-        "x": 600,
+        "x": 580,
         "y": 120,
         "wires": []
     },
     {
-        "id": "acc",
+        "id": "ac1bde61c6395c95",
         "type": "function",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Accel X",
         "func": "return { payload: msg.payload.AcX };",
         "outputs": 1,
         "noerr": 0,
-        "x": 370,
+        "x": 350,
         "y": 160,
         "wires": [
             [
-                "accelChart"
+                "f90be146be6687e6"
             ]
         ]
     },
     {
-        "id": "accelChart",
+        "id": "f90be146be6687e6",
         "type": "ui_chart",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Acceleration X",
-        "group": "main",
+        "group": "609ae40c1738ada2",
         "order": 3,
         "width": 6,
         "height": 3,
@@ -151,34 +165,34 @@
             "#1f77b4"
         ],
         "outputs": 1,
-        "x": 600,
+        "x": 580,
         "y": 160,
         "wires": [
             []
         ]
     },
     {
-        "id": "gyro",
+        "id": "9dd4e151cac87031",
         "type": "function",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Gyro Z",
         "func": "return { payload: msg.payload.GyZ };",
         "outputs": 1,
         "noerr": 0,
-        "x": 370,
+        "x": 350,
         "y": 200,
         "wires": [
             [
-                "gyroChart"
+                "47c3a53f94070e21"
             ]
         ]
     },
     {
-        "id": "gyroChart",
+        "id": "47c3a53f94070e21",
         "type": "ui_chart",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Gyroscope Z",
-        "group": "main",
+        "group": "609ae40c1738ada2",
         "order": 4,
         "width": 6,
         "height": 3,
@@ -197,31 +211,37 @@
             "#ff7f0e"
         ],
         "outputs": 1,
-        "x": 600,
+        "x": 580,
         "y": 200,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "btn",
+        "id": "ad800a591b8cb683",
         "type": "function",
-        "z": "flow",
+        "z": "6696cdd114230937",
         "name": "Button State",
         "func": "return { payload: msg.payload.Btn ? 'Pressed' : 'Released' };",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
-        "x": 370,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
         "y": 240,
         "wires": [
             [
-                "btnText"
+                "9cabf89961d66e36"
             ]
         ]
     },
     {
-        "id": "btnText",
+        "id": "9cabf89961d66e36",
         "type": "ui_text",
-        "z": "flow",
-        "group": "main",
+        "z": "6696cdd114230937",
+        "group": "609ae40c1738ada2",
         "order": 5,
         "width": 6,
         "height": 1,
@@ -229,78 +249,413 @@
         "label": "Button",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 600,
+        "x": 580,
         "y": 240,
         "wires": []
     },
     {
-        "id": "alert",
-        "type": "mqtt in",
-        "z": "flow",
-        "name": "Climate Alert",
-        "topic": "esp32/warning",
-        "qos": "0",
-        "datatype": "auto",
-        "broker": "mqtt_broker",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "x": 150,
-        "y": 300,
+        "id": "59990b94050959d1",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Accel Y",
+        "func": "return { payload: msg.payload.AcY };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 280,
         "wires": [
             [
-                "alertText"
+                "05563384e44af9ef"
             ]
         ]
     },
     {
-        "id": "alertText",
+        "id": "05563384e44af9ef",
+        "type": "ui_chart",
+        "z": "6696cdd114230937",
+        "name": "Acceleration Y",
+        "group": "609ae40c1738ada2",
+        "order": 7,
+        "width": 6,
+        "height": 3,
+        "label": "Accel Y (g)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#2ca02c"
+        ],
+        "outputs": 1,
+        "x": 580,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5bedde620fe83f51",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Accel Z",
+        "func": "return { payload: msg.payload.AcZ };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "d4f1f8c6999228c1"
+            ]
+        ]
+    },
+    {
+        "id": "d4f1f8c6999228c1",
+        "type": "ui_chart",
+        "z": "6696cdd114230937",
+        "name": "Acceleration Z",
+        "group": "609ae40c1738ada2",
+        "order": 8,
+        "width": 6,
+        "height": 3,
+        "label": "Accel Z (g)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#d62728"
+        ],
+        "outputs": 1,
+        "x": 580,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "643072c6ed11983b",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Gyro X",
+        "func": "return { payload: msg.payload.GyX };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "3b5575137d884a3c"
+            ]
+        ]
+    },
+    {
+        "id": "3b5575137d884a3c",
+        "type": "ui_chart",
+        "z": "6696cdd114230937",
+        "name": "Gyroscope X",
+        "group": "609ae40c1738ada2",
+        "order": 9,
+        "width": 6,
+        "height": 3,
+        "label": "Gyro X (°/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderUnit": "3600",
+        "useOneColor": false,
+        "colors": [
+            "#9467bd"
+        ],
+        "outputs": 1,
+        "x": 580,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "26aea8069137c52f",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Gyro Y",
+        "func": "return { payload: msg.payload.GyY };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 400,
+        "wires": [
+            [
+                "15d7c07b39edb4f7"
+            ]
+        ]
+    },
+    {
+        "id": "15d7c07b39edb4f7",
+        "type": "ui_chart",
+        "z": "6696cdd114230937",
+        "name": "Gyroscope Y",
+        "group": "609ae40c1738ada2",
+        "order": 10,
+        "width": 6,
+        "height": 3,
+        "label": "Gyro Y (°/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderUnit": "3600",
+        "useOneColor": false,
+        "colors": [
+            "#8c564b"
+        ],
+        "outputs": 1,
+        "x": 580,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e7f65261879dd7d2",
+        "type": "mqtt in",
+        "z": "6696cdd114230937",
+        "name": "Button State MQTT",
+        "topic": "esp32/button",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 440,
+        "wires": [
+            [
+                "47c0c039e07e26f9"
+            ]
+        ]
+    },
+    {
+        "id": "47c0c039e07e26f9",
         "type": "ui_text",
-        "z": "flow",
-        "group": "main",
-        "order": 6,
+        "z": "6696cdd114230937",
+        "group": "609ae40c1738ada2",
+        "order": 11,
         "width": 6,
         "height": 1,
-        "name": "Climate Alert",
-        "label": "Alert",
+        "name": "Deep Sleep Mode",
+        "label": "Deep Sleep Button",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 400,
-        "y": 300,
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 380,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "ee2b0d8f98a2e007",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Check LED Conditions",
+        "func": "// Получаем значения из сообщения\nconst accelX = msg.payload.AcX;\nconst accelY = msg.payload.AcY;\nconst accelZ = msg.payload.AcZ;\nconst gyroZ = msg.payload.GyZ;\nconst temp = msg.payload.Temp;\nconst hum = msg.payload.Hum;\n\n// Проверяем условия (аналогично коду ESP32)\nconst motionDetected = (Math.abs(accelX) > 1.0 || Math.abs(gyroZ) > 100.0);\nconst tempHumCondition = (temp < 10.0) || (temp > 25.0) || (hum > 80.0);\n\n// Определяем состояние LED\nconst ledState = motionDetected || tempHumCondition;\n\n// Возвращаем новое сообщение с состоянием LED\nreturn {\n    payload: {\n        led: ledState,\n        motion: motionDetected,\n        climateAlert: tempHumCondition,\n        temperature: temp,\n        humidity: hum,\n        accelX: accelX,\n        gyroZ: gyroZ\n    }\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320,
+        "y": 520,
+        "wires": [
+            [
+                "1c4d5cde459d57f6",
+                "df23257a553f45eb",
+                "fc9b916b598f7848",
+                "497e9416c091835c"
+            ]
+        ]
+    },
+    {
+        "id": "fc9b916b598f7848",
+        "type": "debug",
+        "z": "6696cdd114230937",
+        "name": "LED Conditions Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 580,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "1c4d5cde459d57f6",
+        "type": "ui_led",
+        "z": "6696cdd114230937",
+        "order": 12,
+        "group": "609ae40c1738ada2",
+        "width": 2,
+        "height": 1,
+        "label": "LED State",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "true",
+                "valueType": "bool"
+            },
+            {
+                "color": "#00ff00",
+                "value": "false",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": true,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "LED Status",
+        "x": 580,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "df23257a553f45eb",
+        "type": "ui_led",
+        "z": "6696cdd114230937",
+        "order": 13,
+        "group": "609ae40c1738ada2",
+        "width": 2,
+        "height": 1,
+        "label": "Alert",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "true",
+                "valueType": "bool"
+            },
+            {
+                "color": "#00ff00",
+                "value": "false",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": true,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "Alert",
+        "x": 560,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "497e9416c091835c",
+        "type": "function",
+        "z": "6696cdd114230937",
+        "name": "Generate Alert Reason",
+        "func": "// Анализируем состояние и формируем текст предупреждения\nlet alertReason = \"All normal\";\n\nif (msg.payload.led) {\n    alertReason = \"\";\n    const reasons = [];\n    \n    if (msg.payload.motion) {\n        reasons.push(\"Unsafe Motion\");\n    }\n    \n    if (msg.payload.climateAlert) {\n        reasons.push(\"Climate conditions\");\n    }\n    \n    alertReason += reasons.join(\", \");\n}\n\nmsg.payload.alertReason = alertReason;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 640,
+        "wires": [
+            [
+                "381009c88c2bda5c"
+            ]
+        ]
+    },
+    {
+        "id": "381009c88c2bda5c",
+        "type": "ui_text",
+        "z": "6696cdd114230937",
+        "group": "609ae40c1738ada2",
+        "order": 14,
+        "width": 6,
+        "height": 1,
+        "name": "Alert Reason",
+        "label": "Alert Reason",
+        "format": "{{msg.payload.alertReason}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 580,
+        "y": 640,
         "wires": []
     },
     {
         "id": "mqtt_broker",
         "type": "mqtt-broker",
-        "name": "Local MQTT",
+        "name": "Local Broker",
         "broker": "192.168.0.127",
         "port": "1883",
-        "clientid": "nodered-dashboard",
+        "clientid": "",
+        "autoConnect": true,
         "usetls": false,
-        "compatmode": false,
-        "keepalive": "60",
+        "protocolVersion": 4,
+        "keepalive": 15,
         "cleansession": true,
+        "autoUnsubscribe": true,
         "birthTopic": "",
         "birthQos": "0",
         "birthPayload": "",
+        "birthMsg": {},
         "closeTopic": "",
         "closePayload": "",
+        "closeMsg": {},
         "willTopic": "",
         "willQos": "0",
-        "willPayload": ""
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
-        "id": "main",
+        "id": "609ae40c1738ada2",
         "type": "ui_group",
         "name": "ESP32 Monitor",
-        "tab": "dashboard",
+        "tab": "0f0b3cc18fbd6a2f",
         "order": 1,
         "disp": true,
         "width": "6",
         "collapse": false
     },
     {
-        "id": "dashboard",
+        "id": "0f0b3cc18fbd6a2f",
         "type": "ui_tab",
         "name": "ESP32 Dashboard",
         "icon": "dashboard",
