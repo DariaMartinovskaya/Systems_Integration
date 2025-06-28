@@ -96,6 +96,12 @@ void handle_button() {
   if (reading == LOW) {
     if ((millis() - lastDebounceTime) > BUTTON_DEBOUNCE_DELAY) {
       buttonPressed = true;
+
+      // Отправляем состояние перед сном
+      client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
+      client.loop(); // Обеспечиваем отправку сообщения
+      delay(100); // Даем время на отправку
+
       Serial.println("Button pressed - preparing to sleep...");
       client.publish("esp32/button", "pressed");
 
@@ -112,6 +118,7 @@ void handle_button() {
   } else {
     buttonPressed = false;
     lastDebounceTime = millis();
+    client.publish("esp32/deepsleep", "AWAKE"); // Отправляем состояние "не в режиме сна"
   }
 }
 
@@ -215,12 +222,19 @@ void setup() {
   digitalWrite(ledPin, LOW);
   pinMode(buttonPin, INPUT_PULLUP);
 
+  // if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
+  //   for (int i = 0; i < 3; i++) {
+  //     digitalWrite(ledPin, HIGH); delay(200);
+  //     digitalWrite(ledPin, LOW); delay(200);
+  //   }
+  // }
   if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
-    for (int i = 0; i < 3; i++) {
-      digitalWrite(ledPin, HIGH); delay(200);
-      digitalWrite(ledPin, LOW); delay(200);
-    }
+    client.publish("esp32/deepsleep", "AWAKE (WOKE UP)");
+  } else {
+    client.publish("esp32/deepsleep", "AWAKE (INITIAL)");
   }
+  client.loop();
+  delay(100);
 
   if (digitalRead(buttonPin) == LOW) {
     esp_sleep_enable_ext0_wakeup((gpio_num_t)buttonPin, 0);
