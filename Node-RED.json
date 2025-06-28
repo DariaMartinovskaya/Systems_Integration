@@ -29,12 +29,10 @@
                 "5ba82a674ed24d7a",
                 "30b4b8b1a38b8110",
                 "1a6e32c05556536f",
-                "afde21998141ecee",
                 "c5e237d086e9192c",
                 "b64a8cfe9ecb9967",
                 "5a2a952432c03803",
-                "8b973af6fbf175af",
-                "1662c69653a05399"
+                "8b973af6fbf175af"
             ]
         ]
     },
@@ -227,42 +225,6 @@
         ]
     },
     {
-        "id": "afde21998141ecee",
-        "type": "function",
-        "z": "befc95e9a707710a",
-        "name": "Button State",
-        "func": "return { payload: msg.payload.Btn ? 'Pressed' : 'Released' };",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 400,
-        "wires": [
-            [
-                "a358fd691a02d522"
-            ]
-        ]
-    },
-    {
-        "id": "a358fd691a02d522",
-        "type": "ui_text",
-        "z": "befc95e9a707710a",
-        "group": "609ae40c1738ada2",
-        "order": 5,
-        "width": 6,
-        "height": 1,
-        "name": "Button State",
-        "label": "Button",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "x": 570,
-        "y": 400,
-        "wires": []
-    },
-    {
         "id": "c5e237d086e9192c",
         "type": "function",
         "z": "befc95e9a707710a",
@@ -453,25 +415,6 @@
         ]
     },
     {
-        "id": "1662c69653a05399",
-        "type": "function",
-        "z": "befc95e9a707710a",
-        "name": "Check LED Conditions",
-        "func": "// Получаем значения из сообщения\nconst accelX = msg.payload.AcX;\nconst accelY = msg.payload.AcY;\nconst accelZ = msg.payload.AcZ;\nconst gyroZ = msg.payload.GyZ;\nconst temp = msg.payload.Temp;\nconst hum = msg.payload.Hum;\n\n// Проверяем условия (аналогично коду ESP32)\nconst motionDetected = (Math.abs(accelX) > 1.0 || Math.abs(gyroZ) > 100.0);\nconst tempHumCondition = (temp < 10.0) || (temp > 25.0) || (hum > 80.0);\n\n// Определяем состояние LED\nconst ledState = motionDetected || tempHumCondition;\n\n// Возвращаем новое сообщение с состоянием LED\nreturn {\n    payload: {\n        led: ledState,\n        motion: motionDetected,\n        climateAlert: tempHumCondition,\n        temperature: temp,\n        humidity: hum,\n        accelX: accelX,\n        gyroZ: gyroZ\n    }\n};",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 320,
-        "y": 540,
-        "wires": [
-            [
-                "234f59c658db0dbb",
-                "4b0b12d61488a5ee",
-                "77ea74fe0df4b0bc",
-                "0566a154677cc0e7"
-            ]
-        ]
-    },
-    {
         "id": "77ea74fe0df4b0bc",
         "type": "debug",
         "z": "befc95e9a707710a",
@@ -481,8 +424,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 580,
-        "y": 520,
+        "x": 600,
+        "y": 540,
         "wires": []
     },
     {
@@ -496,12 +439,12 @@
         "label": "LED State",
         "colorForValue": [
             {
-                "color": "#ff0000",
+                "color": "#00ff2a",
                 "value": "true",
                 "valueType": "bool"
             },
             {
-                "color": "#00ff00",
+                "color": "#afabb0",
                 "value": "false",
                 "valueType": "bool"
             }
@@ -510,8 +453,8 @@
         "shape": "circle",
         "showGlow": true,
         "name": "LED Status",
-        "x": 580,
-        "y": 560,
+        "x": 610,
+        "y": 600,
         "wires": []
     },
     {
@@ -539,48 +482,7 @@
         "shape": "circle",
         "showGlow": true,
         "name": "Alert",
-        "x": 560,
-        "y": 600,
-        "wires": []
-    },
-    {
-        "id": "0566a154677cc0e7",
-        "type": "function",
-        "z": "befc95e9a707710a",
-        "name": "Generate Alert Reason",
-        "func": "// Анализируем состояние и формируем текст предупреждения\nlet alertReason = \"All normal\";\n\nif (msg.payload.led) {\n    alertReason = \"\";\n    const reasons = [];\n    \n    if (msg.payload.motion) {\n        reasons.push(\"Unsafe Motion\");\n    }\n    \n    if (msg.payload.climateAlert) {\n        reasons.push(\"Climate conditions\");\n    }\n    \n    alertReason += reasons.join(\", \");\n}\n\nmsg.payload.alertReason = alertReason;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 640,
-        "wires": [
-            [
-                "277d6d5c7390777c"
-            ]
-        ]
-    },
-    {
-        "id": "277d6d5c7390777c",
-        "type": "ui_text",
-        "z": "befc95e9a707710a",
-        "group": "609ae40c1738ada2",
-        "order": 14,
-        "width": 6,
-        "height": 1,
-        "name": "Alert Reason",
-        "label": "Alert Reason",
-        "format": "{{msg.payload.alertReason}}",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": "",
-        "color": "#000000",
-        "x": 580,
+        "x": 590,
         "y": 640,
         "wires": []
     },
@@ -628,6 +530,67 @@
         "x": 570,
         "y": 460,
         "wires": []
+    },
+    {
+        "id": "277d6d5c7390777c",
+        "type": "ui_text",
+        "z": "befc95e9a707710a",
+        "group": "609ae40c1738ada2",
+        "order": 14,
+        "width": 6,
+        "height": 1,
+        "name": "Alert Reason",
+        "label": "Alert Reason",
+        "format": "{{msg.payload.alertReason}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 610,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "mqtt_state_input",
+        "type": "mqtt in",
+        "z": "befc95e9a707710a",
+        "name": "ESP32 State",
+        "topic": "esp32/state",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "mqtt_broker",
+        "inputs": 0,
+        "x": 110,
+        "y": 580,
+        "wires": [
+            [
+                "process_state_data"
+            ]
+        ]
+    },
+    {
+        "id": "process_state_data",
+        "type": "function",
+        "z": "befc95e9a707710a",
+        "name": "Process State Data",
+        "func": "const data = msg.payload;\n\n// Проверяем наличие необходимых полей\nif (!data.state || !data.state.led || !data.state.climateAlert || !data.state.reason) {\n    node.error(\"Invalid message format\", msg);\n    return null;\n}\n\nreturn [\n    { payload: data.state.led, topic: \"led\" },\n    { payload: data.state.climateAlert, topic: \"alert\" },\n    { payload: { alertReason: data.state.reason }, topic: \"reason\" }\n];",
+        "outputs": 3,
+        "x": 330,
+        "y": 580,
+        "wires": [
+            [
+                "77ea74fe0df4b0bc"
+            ],
+            [
+                "234f59c658db0dbb"
+            ],
+            [
+                "4b0b12d61488a5ee",
+                "277d6d5c7390777c"
+            ]
+        ]
     },
     {
         "id": "mqtt_broker",
