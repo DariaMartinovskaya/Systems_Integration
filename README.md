@@ -27,6 +27,7 @@ This ESP32-based system monitors:
 | LED (Anode)     | GPIO 5   | Through current-limiting resistor |
 | Button          | GPIO 2   | Other side to GND        |
 
+Model simulation using wokwi.com online service just for visualization:
 ![Node_RED_UI](model.png)
 
 ## 📝 Code Functionality
