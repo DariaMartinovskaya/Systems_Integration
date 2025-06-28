@@ -121,13 +121,25 @@ void check_conditions() {
 
   bool motionDetected = (fabs(accelX) > 1.0 || fabs(gyroZ) > 100.0);
   bool tempHumCondition = (temperature < 10.0) || (temperature > 25.0) || (humidity > 80.0);
+  bool ledState = motionDetected || tempHumCondition;
 
-  digitalWrite(ledPin, (motionDetected || tempHumCondition) ? HIGH : LOW);
+  //digitalWrite(ledPin, (motionDetected || tempHumCondition) ? HIGH : LOW);
+  digitalWrite(ledPin, ledState ? HIGH : LOW);
 
   if (tempHumCondition) {
     Serial.println("Climate condition triggered!");
     client.publish("climate/alert", "ALERT");
   }
+
+  // Sending additional data for Node-RED
+  StaticJsonDocument<128> alertDoc;
+  alertDoc["led"] = ledState;
+  alertDoc["motion"] = motionDetected;
+  alertDoc["climateAlert"] = tempHumCondition;
+  
+  char alertBuffer[128];
+  serializeJson(alertDoc, alertBuffer);
+  client.publish("esp32/alerts", alertBuffer);
 }
 
 void send_mqtt_data() {
@@ -239,3 +251,4 @@ void loop() {
 
   delay(100);
 }
+
