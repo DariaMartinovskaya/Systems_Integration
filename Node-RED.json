@@ -24,7 +24,6 @@
         "y": 80,
         "wires": [
             [
-                "a6c9229feca953f8",
                 "7f5b133f1e27db16",
                 "5ba82a674ed24d7a",
                 "30b4b8b1a38b8110",
@@ -32,23 +31,10 @@
                 "c5e237d086e9192c",
                 "b64a8cfe9ecb9967",
                 "5a2a952432c03803",
-                "8b973af6fbf175af"
+                "8b973af6fbf175af",
+                "a6c9229feca953f8"
             ]
         ]
-    },
-    {
-        "id": "a6c9229feca953f8",
-        "type": "debug",
-        "z": "befc95e9a707710a",
-        "name": "Full Sensor Data",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 350,
-        "y": 40,
-        "wires": []
     },
     {
         "id": "7f5b133f1e27db16",
@@ -57,7 +43,11 @@
         "name": "Temperature",
         "func": "return { payload: msg.payload.Temp };",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 350,
         "y": 80,
         "wires": [
@@ -71,16 +61,25 @@
         "type": "ui_gauge",
         "z": "befc95e9a707710a",
         "name": "Temp Gauge",
-        "group": "609ae40c1738ada2",
+        "group": "a6148ac5c5c1b48c",
         "order": 1,
-        "width": 6,
-        "height": 2,
+        "width": "6",
+        "height": "4",
         "gtype": "gage",
         "title": "Temperature (°C)",
         "label": "°C",
         "format": "{{value}}",
         "min": 0,
         "max": 50,
+        "colors": [
+            "#00b500",
+            "#e600c7",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
         "x": 530,
         "y": 80,
         "wires": []
@@ -106,10 +105,10 @@
         "type": "ui_gauge",
         "z": "befc95e9a707710a",
         "name": "Humidity Gauge",
-        "group": "609ae40c1738ada2",
+        "group": "a6148ac5c5c1b48c",
         "order": 2,
-        "width": 6,
-        "height": 2,
+        "width": "6",
+        "height": "4",
         "gtype": "gage",
         "title": "Humidity (%)",
         "label": "%",
@@ -150,7 +149,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Acceleration X",
-        "group": "609ae40c1738ada2",
+        "group": "a15bc3bb5d1f0255",
         "order": 3,
         "width": 6,
         "height": 3,
@@ -168,10 +167,21 @@
         "removeOlderUnit": "3600",
         "cutout": 0,
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#1f77b4"
+            "#1f77b4",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
         "x": 580,
         "y": 160,
         "wires": [
@@ -187,7 +197,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 350,
-        "y": 200,
+        "y": 280,
         "wires": [
             [
                 "4752a132e25d0626"
@@ -199,7 +209,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Gyroscope Z",
-        "group": "609ae40c1738ada2",
+        "group": "421aaf37cef1de60",
         "order": 4,
         "width": 6,
         "height": 3,
@@ -208,18 +218,32 @@
         "legend": "false",
         "xformat": "HH:mm:ss",
         "interpolate": "linear",
+        "nodata": "",
         "dot": true,
         "ymin": "",
         "ymax": "",
         "removeOlder": 1,
+        "removeOlderPoints": "",
         "removeOlderUnit": "3600",
+        "cutout": "",
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#ff7f0e"
+            "#ff7f0e",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
-        "x": 580,
-        "y": 200,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 570,
+        "y": 280,
         "wires": [
             []
         ]
@@ -233,7 +257,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 360,
-        "y": 240,
+        "y": 200,
         "wires": [
             [
                 "4c174c7603dd9ad2"
@@ -245,7 +269,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Acceleration Y",
-        "group": "609ae40c1738ada2",
+        "group": "a15bc3bb5d1f0255",
         "order": 7,
         "width": 6,
         "height": 3,
@@ -263,12 +287,23 @@
         "removeOlderUnit": "3600",
         "cutout": 0,
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#2ca02c"
+            "#2ca02c",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
         "x": 580,
-        "y": 240,
+        "y": 200,
         "wires": [
             []
         ]
@@ -281,8 +316,8 @@
         "func": "return { payload: msg.payload.AcZ };",
         "outputs": 1,
         "noerr": 0,
-        "x": 360,
-        "y": 280,
+        "x": 340,
+        "y": 240,
         "wires": [
             [
                 "b05f6afd9d7eaeaf"
@@ -294,7 +329,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Acceleration Z",
-        "group": "609ae40c1738ada2",
+        "group": "a15bc3bb5d1f0255",
         "order": 8,
         "width": 6,
         "height": 3,
@@ -312,12 +347,23 @@
         "removeOlderUnit": "3600",
         "cutout": 0,
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#d62728"
+            "#d62728",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
-        "x": 580,
-        "y": 280,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 560,
+        "y": 240,
         "wires": [
             []
         ]
@@ -343,7 +389,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Gyroscope X",
-        "group": "609ae40c1738ada2",
+        "group": "421aaf37cef1de60",
         "order": 9,
         "width": 6,
         "height": 3,
@@ -352,16 +398,30 @@
         "legend": "false",
         "xformat": "HH:mm:ss",
         "interpolate": "linear",
+        "nodata": "",
         "dot": true,
         "ymin": "",
         "ymax": "",
         "removeOlder": 1,
+        "removeOlderPoints": "",
         "removeOlderUnit": "3600",
+        "cutout": "",
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#9467bd"
+            "#9467bd",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
         "x": 570,
         "y": 320,
         "wires": [
@@ -389,7 +449,7 @@
         "type": "ui_chart",
         "z": "befc95e9a707710a",
         "name": "Gyroscope Y",
-        "group": "609ae40c1738ada2",
+        "group": "421aaf37cef1de60",
         "order": 10,
         "width": 6,
         "height": 3,
@@ -398,16 +458,30 @@
         "legend": "false",
         "xformat": "HH:mm:ss",
         "interpolate": "linear",
+        "nodata": "",
         "dot": true,
         "ymin": "",
         "ymax": "",
         "removeOlder": 1,
+        "removeOlderPoints": "",
         "removeOlderUnit": "3600",
+        "cutout": "",
         "useOneColor": false,
+        "useUTC": false,
         "colors": [
-            "#8c564b"
+            "#8c564b",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
         "x": 570,
         "y": 360,
         "wires": [
@@ -428,7 +502,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 100,
-        "y": 420,
+        "y": 400,
         "wires": [
             [
                 "aa5d039261d08d21"
@@ -439,7 +513,7 @@
         "id": "aa5d039261d08d21",
         "type": "ui_text",
         "z": "befc95e9a707710a",
-        "group": "609ae40c1738ada2",
+        "group": "aa8ddafe6c0d6db5",
         "order": 11,
         "width": 6,
         "height": 1,
@@ -451,12 +525,9 @@
         "style": false,
         "font": "",
         "fontSize": "",
-        "color": {
-            "value": "{{msg.payload.includes('ENTERING') ? '#FF0000' : '#00AA00'}}",
-            "valueType": "jsonata"
-        },
+        "color": "#000000",
         "x": 570,
-        "y": 420,
+        "y": 400,
         "wires": []
     },
     {
@@ -464,7 +535,7 @@
         "type": "ui_led",
         "z": "befc95e9a707710a",
         "order": 12,
-        "group": "609ae40c1738ada2",
+        "group": "aa8ddafe6c0d6db5",
         "width": 2,
         "height": 1,
         "label": "LED State",
@@ -485,7 +556,7 @@
         "showGlow": true,
         "name": "LED Status",
         "x": 590,
-        "y": 500,
+        "y": 520,
         "wires": []
     },
     {
@@ -493,7 +564,7 @@
         "type": "ui_led",
         "z": "befc95e9a707710a",
         "order": 13,
-        "group": "609ae40c1738ada2",
+        "group": "aa8ddafe6c0d6db5",
         "width": 2,
         "height": 1,
         "label": "Alert",
@@ -514,7 +585,7 @@
         "showGlow": true,
         "name": "Alert",
         "x": 570,
-        "y": 540,
+        "y": 560,
         "wires": []
     },
     {
@@ -529,7 +600,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "7e2bdafc89eb3fdf",
@@ -559,7 +630,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 90,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "e7d65cce17d2e963"
@@ -570,7 +641,7 @@
         "id": "68608e58096f3b1b",
         "type": "ui_text",
         "z": "befc95e9a707710a",
-        "group": "609ae40c1738ada2",
+        "group": "aa8ddafe6c0d6db5",
         "order": 14,
         "width": 6,
         "height": 1,
@@ -579,10 +650,12 @@
         "format": "{{msg.payload.alertReason}}",
         "layout": "row-spread",
         "className": "",
-        "style": "color: {{msg.payload.color || '#000000'}}; font-weight: bold;",
+        "style": true,
+        "font": "",
         "fontSize": "14px",
+        "color": "#000000",
         "x": 590,
-        "y": 580,
+        "y": 600,
         "wires": []
     },
     {
@@ -599,7 +672,21 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 570,
-        "y": 620,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "a6c9229feca953f8",
+        "type": "debug",
+        "z": "befc95e9a707710a",
+        "name": "Full Sensor Data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 350,
+        "y": 40,
         "wires": []
     },
     {
@@ -630,22 +717,55 @@
         "sessionExpiry": ""
     },
     {
-        "id": "609ae40c1738ada2",
+        "id": "a6148ac5c5c1b48c",
         "type": "ui_group",
-        "name": "ESP32 Monitor",
-        "tab": "0f0b3cc18fbd6a2f",
-        "order": 1,
+        "name": "DHT Data",
+        "tab": "1caff58b0a1a0c73",
+        "order": 2,
         "disp": true,
-        "width": "6",
+        "width": 6,
         "collapse": false,
         "className": ""
     },
     {
-        "id": "0f0b3cc18fbd6a2f",
+        "id": "a15bc3bb5d1f0255",
+        "type": "ui_group",
+        "name": "MPU6050 - Accel",
+        "tab": "1caff58b0a1a0c73",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "421aaf37cef1de60",
+        "type": "ui_group",
+        "name": "MPU6050 - Gyro",
+        "tab": "1caff58b0a1a0c73",
+        "order": 4,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "aa8ddafe6c0d6db5",
+        "type": "ui_group",
+        "name": "Alerts",
+        "tab": "1caff58b0a1a0c73",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1caff58b0a1a0c73",
         "type": "ui_tab",
-        "name": "ESP32 Dashboard",
+        "name": "Main Dashboard",
         "icon": "dashboard",
-        "order": 30,
+        "order": 32,
         "disabled": false,
         "hidden": false
     }
