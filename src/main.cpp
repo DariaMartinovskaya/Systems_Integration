@@ -157,7 +157,14 @@ void check_conditions() {
 
   char buffer[256];
   serializeJson(doc, buffer);
-  client.publish("esp32/state", buffer);
+  if (!client.publish("esp32/state", buffer)) {
+    Serial.println("MQTT publish failed!");
+  } else {
+    Serial.println("Published state:");
+    Serial.print("LED: "); Serial.println(ledState ? "ON" : "OFF");
+    Serial.print("Alert: "); Serial.println(tempHumCondition ? "YES" : "NO");
+    Serial.print("Reason: "); Serial.println(alertReason);
+  }
 }
 
 void send_mqtt_data() {
