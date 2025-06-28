@@ -127,8 +127,11 @@ Text/status indicators
 #### Example of Node-Red flow:
 ![Node_RED_Flow](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Scheme.png)
 
-#### Example of Node-Red UI dashboard:
-![Node_RED_UI](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/Node_Red_UI.png)
+#### Example of Node-Red UI dashboard (deep sleep mode is activated):
+![Node_RED_UI](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/deepsleepmode.png)
+
+#### Example of Node-Red UI dashboard (deep sleep mode is not activated, at the moment DHT11 sensor is not connected, therefore humidity and temperature data is not displayed):
+![Node_RED_UI](https://github.com/DariaMartinovskaya/Systems_Integration/blob/main/active%20mode.png)
 
 ### 🔄 Workflow
 1. ESP32 initializes sensors and connects to WiFi & MQTT
