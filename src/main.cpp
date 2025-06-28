@@ -126,7 +126,7 @@ void check_conditions() {
 
   if (tempHumCondition) {
     Serial.println("Climate condition triggered!");
-    client.publish("esp32/warning", "climate_alert");
+    client.publish("climate/alert", "ALERT");
   }
 }
 
@@ -239,4 +239,3 @@ void loop() {
 
   delay(100);
 }
-
