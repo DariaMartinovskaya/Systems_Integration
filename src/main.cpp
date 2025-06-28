@@ -97,6 +97,15 @@ void handle_button() {
     if ((millis() - lastDebounceTime) > BUTTON_DEBOUNCE_DELAY) {
       buttonPressed = true;
 
+      // Sending LED status as false before sleep
+      StaticJsonDocument<128> sleepDoc;
+      sleepDoc["state"]["led"] = false;
+      sleepDoc["state"]["reason"] = "Deep sleep activated";
+      char sleepBuffer[128];
+      serializeJson(sleepDoc, sleepBuffer);
+      client.publish("esp32/state", sleepBuffer);
+      client.loop(); // To be checked that message is sent
+
       // Sending status before sleep
       client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
       client.loop(); // Ensuring data sending
