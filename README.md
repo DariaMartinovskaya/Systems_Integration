@@ -51,11 +51,22 @@ Model simulation using wokwi.com online service just for visualization:
   - JSON API endpoint (`/data`)
   - Auto-refreshing web dashboard
 - **MQTT Integration**:
-Publishes sensor data to MQTT topic every N seconds
+Publishes sensor data to MQTT topic every N seconds.
 Topics used:
   - esp32/motion
   - esp32/climate
   - esp32/status
+- **ESP32 Deep Sleep**:
+Project features deep sleep mode to save power, with MQTT messages sent before entering sleep. How it works:
+- The device connects and maintains MQTT connection.
+- Sensor data and button state are read periodically.
+- If the button is pressed, ESP32 publishes a message and immediately enters deep sleep.
+- If sensor readings indicate normal conditions, data is sent via MQTT, then the device enters deep sleep after publishing "deep sleep activated" messages.
+- If abnormal conditions (e.g., extreme temperature, humidity, or movement) are detected, alerts are published, LED indicators light up, and the device stays awake.
+- Wake-up from deep sleep is triggered by a button press, upon which the ESP32 sends an "AWAKE" MQTT message and resumes normal operation.
+
+This cycle repeats indefinitely, optimizing power consumption while maintaining real-time monitoring and communication.
+
  
 ## 🧠 Raspberry Pi Setup
 
