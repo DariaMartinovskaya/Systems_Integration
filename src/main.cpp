@@ -3,6 +3,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <DHT.h>
+#include <queue>
 
 #define BUTTON_DEBOUNCE_DELAY 50
 
@@ -36,31 +37,75 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 unsigned long lastMQTTSend = 0;
 
+// --- Data Queue ---
+std::queue<String> dataQueue;
+const int MAX_QUEUE_SIZE = 100; // Max queue size
+
 // --- Sleep Control ---
 bool shouldSleep = false;  // Flag to enter deep sleep if no alerts
+bool wifiWasConnected = false;
+
+// // Database-related topics (added for Node-RED database integration)
+// const char* mqtt_topic_sensors = "esp32/sensors";       // Main sensor data topic
+// const char* mqtt_topic_state = "esp32/state";          // System state topic
+// const char* mqtt_topic_deepsleep = "esp32/deepsleep";   // Sleep notifications
+// const char* mqtt_topic_button = "esp32/button";         // Button events
 
 void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, pass);
-  while (WiFi.status() != WL_CONNECTED) {
+
+
+  unsigned long startAttemptTime = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWiFi connected. IP address: ");
-  Serial.println(WiFi.localIP());
+
+  if (WiFi.status() == WL_CONNECTED) {
+      Serial.println("\nWiFi connected. IP address: ");
+      Serial.println(WiFi.localIP());
+      wifiWasConnected = true;
+    } else {
+      Serial.println("\nFailed to connect to WiFi");
+    }
+  }
+
+// Function for adding data to queue
+void addToQueue(const String& data) {
+  if (dataQueue.size() >= MAX_QUEUE_SIZE) {
+    // If queue is full, deleting the most old data
+    dataQueue.pop();
+  }
+  dataQueue.push(data);
+}
+
+// Function to send all data from queue
+void sendQueuedData() {
+  while (!dataQueue.empty() && client.connected()) {
+    String data = dataQueue.front();
+    if (client.publish("esp32/sensors", data.c_str())) {
+      dataQueue.pop();
+      delay(50); // Small delay betweeen sendings
+    } else {
+      Serial.println("Failed to send queued data, will retry later");
+      break;
+    }
+  }
 }
 
 void reconnect_mqtt() {
-  while (!client.connected()) {
+  if (!client.connected() && WiFi.status() == WL_CONNECTED) {
     Serial.print("Attempting MQTT connection...");
     if (client.connect("ESP32Client")) {
       Serial.println("connected to MQTT.");
+      // After connecting to MQTT sending all data from queue 
+      sendQueuedData();
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" trying again in 5 seconds...");
-      delay(5000);
     }
   }
 }
@@ -101,16 +146,24 @@ void handle_button() {
       sleepDoc["state"]["reason"] = "Deep sleep activated";
       char sleepBuffer[128];
       serializeJson(sleepDoc, sleepBuffer);
-      client.publish("esp32/state", sleepBuffer);
-      client.loop();
-      delay(100);
 
-      client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
-      client.loop();
-      delay(100);
+      if (client.connected()) {
+        client.publish("esp32/state", sleepBuffer);
+        client.loop();
+        delay(100);
+        client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
+        client.loop();
+      } else {
+        addToQueue(sleepBuffer); // Saving into queue in case there is not connection
+      }
 
       Serial.println("Button pressed - preparing to sleep...");
-      client.publish("esp32/button", "pressed");
+
+      if (client.connected()) {
+        client.publish("esp32/button", "pressed");
+      } else {
+        addToQueue("{\"button\":\"pressed\"}");
+      }
 
       for (int i = 0; i < 3; i++) {
         digitalWrite(ledPin, HIGH);
@@ -125,7 +178,9 @@ void handle_button() {
   } else {
     buttonPressed = false;
     lastDebounceTime = millis();
-    client.publish("esp32/deepsleep", "AWAKE");
+    if (client.connected()) {
+      client.publish("esp32/deepsleep", "AWAKE");
+    }
   }
 }
 
@@ -161,13 +216,20 @@ void check_conditions() {
 
   char buffer[256];
   serializeJson(doc, buffer);
-  if (!client.publish("esp32/state", buffer)) {
-    Serial.println("MQTT publish failed!");
+
+  if (WiFi.status() == WL_CONNECTED && client.connected()) {
+    if (!client.publish("esp32/state", buffer)) {
+      Serial.println("MQTT publish failed, adding to queue");
+      addToQueue(buffer);
+    } else {
+      Serial.println("Published state:");
+      Serial.print("LED: "); Serial.println(ledState ? "ON" : "OFF");
+      Serial.print("Alert: "); Serial.println(tempHumCondition ? "YES" : "NO");
+      Serial.print("Reason: "); Serial.println(alertReason);
+    }
   } else {
-    Serial.println("Published state:");
-    Serial.print("LED: "); Serial.println(ledState ? "ON" : "OFF");
-    Serial.print("Alert: "); Serial.println(tempHumCondition ? "YES" : "NO");
-    Serial.print("Reason: "); Serial.println(alertReason);
+    addToQueue(buffer);
+    Serial.println("WiFi/MQTT not connected, data added to queue");
   }
 
   // Prepare for sleep if everything is OK
@@ -176,6 +238,7 @@ void check_conditions() {
 
 void send_mqtt_data() {
   StaticJsonDocument<256> doc;
+  doc["timestamp"] = millis();
   doc["AcX"] = AcX / 16384.0;
   doc["AcY"] = AcY / 16384.0;
   doc["AcZ"] = AcZ / 16384.0;
@@ -188,10 +251,22 @@ void send_mqtt_data() {
 
   char buffer[256];
   serializeJson(doc, buffer);
-  client.publish("esp32/sensors", buffer);
+
+
+  if (WiFi.status() == WL_CONNECTED && client.connected()) {
+    if (!client.publish("esp32/sensors", buffer)) {
+      Serial.println("MQTT publish failed, adding to queue");
+      addToQueue(buffer);
+    }
+  } else {
+    addToQueue(buffer);
+    Serial.println("WiFi/MQTT not connected, data added to queue");
+  }
 }
 
 void handle_client() {
+  if (WiFi.status() != WL_CONNECTED) return;
+
   WiFiClient clientWeb = server.available();
   if (!clientWeb) return;
 
@@ -226,6 +301,7 @@ void handle_client() {
     clientWeb.print("</script></head><body>");
     clientWeb.print("<h2>DHT11: Temperature = <span id='temp'>0</span>, Humidity = <span id='hum'>0</span></h2>");
     clientWeb.print("<h2>Button: <span id='btn'>Released</span></h2>");
+    clientWeb.print("<h3>Queue size: " + String(dataQueue.size()) + "</h3>");
     clientWeb.print("</body></html>");
   }
 
@@ -251,25 +327,42 @@ void setup() {
   server.begin();
 
   if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
-    client.publish("esp32/deepsleep", "AWAKE (WOKE UP)");
+    if (client.connected()) {
+      client.publish("esp32/deepsleep", "AWAKE (WOKE UP)");
+    } else {
+      addToQueue("{\"deepsleep\":\"AWAKE (WOKE UP)\"}");
+    }
   } else {
-    client.publish("esp32/deepsleep", "AWAKE (INITIAL)");
+    if (client.connected()) {
+      client.publish("esp32/deepsleep", "AWAKE (INITIAL)");
+    } else {
+      addToQueue("{\"deepsleep\":\"AWAKE (INITIAL)\"}");
+    }
   }
   client.loop();
   delay(100);
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect_mqtt();
+  // Periodically trying to connect to WiFi in case there is no connection 
+  if (WiFi.status() != WL_CONNECTED) {
+    if (wifiWasConnected || millis() > 30000) {
+      // If there was a connection earlier or more than 30 seconds have passed since the start of work
+      setup_wifi();
+    }
+  } else {
+    if (!client.connected()) {
+      reconnect_mqtt();
+    }
+    client.loop();
   }
-  client.loop();
 
   mpu_read();
   read_dht();
   handle_button();
   check_conditions();
   handle_client();
+
 
   if (millis() - lastMQTTSend > 2000) {
     send_mqtt_data();
@@ -280,8 +373,12 @@ void loop() {
   if (shouldSleep) {
     Serial.println("System normal. Preparing to enter deep sleep...");
 
-    client.publish("esp32/deepsleep", "NO ALERTS – Sleeping...");
-    client.loop();
+    if (client.connected()) {
+      client.publish("esp32/deepsleep", "NO ALERTS – Sleeping...");
+      client.loop();
+    } else {
+      addToQueue("{\"deepsleep\":\"NO ALERTS – Sleeping...\"}");
+    }
     delay(100);
 
     for (int i = 0; i < 2; i++) {
