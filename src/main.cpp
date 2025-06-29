@@ -36,16 +36,17 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 unsigned long lastMQTTSend = 0;
 
+// --- Sleep Control ---
+bool shouldSleep = false;  // Flag to enter deep sleep if no alerts
+
 void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, pass);
-
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-
   Serial.println("\nWiFi connected. IP address: ");
   Serial.println(WiFi.localIP());
 }
@@ -69,7 +70,6 @@ void mpu_read() {
   Wire.write(0x3B);
   Wire.endTransmission(false);
   Wire.requestFrom((uint8_t)MPU_addr, (size_t)14, true);
-
   if (Wire.available() == 14) {
     AcX = Wire.read() << 8 | Wire.read();
     AcY = Wire.read() << 8 | Wire.read();
@@ -92,24 +92,22 @@ void read_dht() {
 
 void handle_button() {
   int reading = digitalRead(buttonPin);
-  
   if (reading == LOW) {
     if ((millis() - lastDebounceTime) > BUTTON_DEBOUNCE_DELAY) {
       buttonPressed = true;
 
-      // Sending LED status as false before sleep
       StaticJsonDocument<128> sleepDoc;
       sleepDoc["state"]["led"] = false;
       sleepDoc["state"]["reason"] = "Deep sleep activated";
       char sleepBuffer[128];
       serializeJson(sleepDoc, sleepBuffer);
       client.publish("esp32/state", sleepBuffer);
-      client.loop(); // To be checked that message is sent
+      client.loop();
+      delay(100);
 
-      // Sending status before sleep
       client.publish("esp32/deepsleep", "ENTERING_DEEP_SLEEP");
-      client.loop(); // Ensuring data sending
-      delay(100); // Giving time for sending
+      client.loop();
+      delay(100);
 
       Serial.println("Button pressed - preparing to sleep...");
       client.publish("esp32/button", "pressed");
@@ -120,14 +118,14 @@ void handle_button() {
         digitalWrite(ledPin, LOW);
         delay(300);
       }
-      
+
       esp_sleep_enable_ext0_wakeup((gpio_num_t)buttonPin, 0);
       esp_deep_sleep_start();
     }
   } else {
     buttonPressed = false;
     lastDebounceTime = millis();
-    client.publish("esp32/deepsleep", "AWAKE"); // Sending status "not in sleep"
+    client.publish("esp32/deepsleep", "AWAKE");
   }
 }
 
@@ -142,10 +140,8 @@ void check_conditions() {
   Serial.print("Motion: "); Serial.print(motionDetected);
   Serial.print(" | Climate: "); Serial.println(tempHumCondition);
 
-  //digitalWrite(ledPin, (motionDetected || tempHumCondition) ? HIGH : LOW);
   digitalWrite(ledPin, ledState ? HIGH : LOW);
 
-  // Creating alert reason
   String alertReason = "All normal";
   if (ledState) {
     alertReason = "";
@@ -156,7 +152,6 @@ void check_conditions() {
     }
   }
 
-  // Creating single message with all statuses
   StaticJsonDocument<256> doc;
   JsonObject state = doc.createNestedObject("state");
   state["led"] = ledState;
@@ -174,6 +169,9 @@ void check_conditions() {
     Serial.print("Alert: "); Serial.println(tempHumCondition ? "YES" : "NO");
     Serial.print("Reason: "); Serial.println(alertReason);
   }
+
+  // Prepare for sleep if everything is OK
+  shouldSleep = !ledState;
 }
 
 void send_mqtt_data() {
@@ -239,7 +237,6 @@ void setup() {
   Wire.begin();
   dht.begin();
 
-  // MPU6050 init
   Wire.beginTransmission(MPU_addr);
   Wire.write(0x6B);
   Wire.write(0);
@@ -249,6 +246,10 @@ void setup() {
   digitalWrite(ledPin, LOW);
   pinMode(buttonPin, INPUT_PULLUP);
 
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+  server.begin();
+
   if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0) {
     client.publish("esp32/deepsleep", "AWAKE (WOKE UP)");
   } else {
@@ -256,15 +257,6 @@ void setup() {
   }
   client.loop();
   delay(100);
-
-  if (digitalRead(buttonPin) == LOW) {
-    esp_sleep_enable_ext0_wakeup((gpio_num_t)buttonPin, 0);
-    esp_deep_sleep_start();
-  }
-
-  setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  server.begin();
 }
 
 void loop() {
@@ -284,6 +276,24 @@ void loop() {
     lastMQTTSend = millis();
   }
 
+  // Deep Sleep if no alert
+  if (shouldSleep) {
+    Serial.println("System normal. Preparing to enter deep sleep...");
+
+    client.publish("esp32/deepsleep", "NO ALERTS – Sleeping...");
+    client.loop();
+    delay(100);
+
+    for (int i = 0; i < 2; i++) {
+      digitalWrite(ledPin, HIGH);
+      delay(200);
+      digitalWrite(ledPin, LOW);
+      delay(200);
+    }
+
+    esp_sleep_enable_ext0_wakeup((gpio_num_t)buttonPin, 0);
+    esp_deep_sleep_start();
+  }
+
   delay(100);
 }
-
