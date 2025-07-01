@@ -25,7 +25,7 @@ This ESP32-based system monitors:
 | DHT22 (DATA)    | GPIO 14  | Data pin with pull-up    |
 | DHT22 (GND)     | GND      | Ground                   |
 | LED (Anode)     | GPIO 5   | Through current-limiting resistor |
-| Button          | GPIO 2   | Other side to GND        |
+| Button          | GPIO 4   | Other side to GND        |
 
 Model simulation using wokwi.com online service just for visualization:
 ![Wookwi](model.png)
