@@ -22,7 +22,7 @@ This ESP32-based system monitors:
 | MPU6050 (SDA)   | GPIO 21  | I2C data line            |
 | MPU6050 (SCL)   | GPIO 22  | I2C clock line           |
 | DHT22 (VCC)     | 5V       | Power supply             |
-| DHT22 (DATA)    | GPIO 23  | Data pin with pull-up    |
+| DHT22 (DATA)    | GPIO 14  | Data pin with pull-up    |
 | DHT22 (GND)     | GND      | Ground                   |
 | LED (Anode)     | GPIO 5   | Through current-limiting resistor |
 | Button          | GPIO 2   | Other side to GND        |
