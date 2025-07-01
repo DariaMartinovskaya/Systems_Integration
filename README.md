@@ -5,7 +5,7 @@
 ## 📋 Project Overview
 This ESP32-based system monitors:
 - Motion/orientation (MPU6050 accelerometer/gyroscope)
-- Temperature and humidity (DHT11)
+- Temperature and humidity (DHT22 (alternative - DHT11))
 - Features low-power sleep mode
 - Provides LED signals for power-on, deep sleep entry, and wake-up
 - Provides visual sensors data feedback via LED
@@ -21,9 +21,9 @@ This ESP32-based system monitors:
 | MPU6050 (GND)   | GND      | Ground                   |
 | MPU6050 (SDA)   | GPIO 21  | I2C data line            |
 | MPU6050 (SCL)   | GPIO 22  | I2C clock line           |
-| DHT11 (VCC)     | 5V       | Power supply             |
-| DHT11 (DATA)    | GPIO 23  | Data pin with pull-up    |
-| DHT11 (GND)     | GND      | Ground                   |
+| DHT22 (VCC)     | 5V       | Power supply             |
+| DHT22 (DATA)    | GPIO 23  | Data pin with pull-up    |
+| DHT22 (GND)     | GND      | Ground                   |
 | LED (Anode)     | GPIO 5   | Through current-limiting resistor |
 | Button          | GPIO 2   | Other side to GND        |
 
@@ -36,7 +36,7 @@ Model simulation using wokwi.com online service just for visualization:
 ### Key Features
 - **Sensor Monitoring**:
   - Continuous MPU6050 motion/orientation tracking
-  - Periodic DHT11 climate measurements
+  - Periodic DHT22 climate measurements
 - **Smart LED Control**:
   - LED turns on when motion is detected (configurable threshold)
   - LED turns on when humidity > 80% OR temperature < 10°C or > 25°C
