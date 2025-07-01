@@ -28,10 +28,10 @@ This ESP32-based system monitors:
 | Button          | GPIO 2   | Other side to GND        |
 
 Model simulation using wokwi.com online service just for visualization:
-![Node_RED_UI](model.png)
+![Wookwi](model.png)
 
 Real board configuration:
-![Node_RED_UI]()
+![Board](Board.jpg)
 
 ## 📝 Code Functionality
 <a href="src/main.cpp">Source code.</a>
