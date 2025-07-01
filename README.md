@@ -150,7 +150,7 @@ Text/status indicators
 
 #### Example of Node-Red UI dashboard 
 Deep sleep mode is activated:
-![Node_RED_UI]()
+![Node_RED_UI](deepsleepmode.png)
 
 Deep sleep mode is not activated:
 ![Node_RED_UI](Workingsystem.png)
