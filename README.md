@@ -28,7 +28,7 @@ This ESP32-based system monitors:
 | Button          | GPIO 4   | Other side to GND        |
 
 Model simulation using wokwi.com online service just for visualization:
-![Wookwi](model.png)
+![Wookwi](Scheme2.png)
 
 Real board configuration:
 ![Board](Board.jpg)
