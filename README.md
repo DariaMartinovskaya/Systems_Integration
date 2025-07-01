@@ -30,6 +30,9 @@ This ESP32-based system monitors:
 Model simulation using wokwi.com online service just for visualization:
 ![Node_RED_UI](model.png)
 
+Real board configuration:
+![Node_RED_UI]()
+
 ## 📝 Code Functionality
 <a href="src/main.cpp">Source code.</a>
 
@@ -147,10 +150,10 @@ Text/status indicators
 
 #### Example of Node-Red UI dashboard 
 Deep sleep mode is activated:
-![Node_RED_UI](deepsleepmode.png)
+![Node_RED_UI]()
 
-Deep sleep mode is not activated, at the moment DHT11 sensor is not connected, therefore humidity and temperature data is not displayed:
-![Node_RED_UI](activemode.png)
+Deep sleep mode is not activated:
+![Node_RED_UI](Workingsystem.png)
 
 ### 🔄 Workflow
 1. ESP32 initializes sensors and connects to WiFi & MQTT
