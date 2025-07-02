@@ -11,7 +11,7 @@
 const int MPU_addr = 0x68;
 int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
 
-// --- DHT11 ---
+// --- DHT22 ---
 #define DHTPIN 14 
 #define DHTTYPE DHT22 // Or DHT11 can be used
 DHT dht(DHTPIN, DHTTYPE);
