@@ -169,6 +169,8 @@ Deep sleep mode is not activated:
 - LED flashes, system enters deep sleep
 5. On wake-up:
 - LED flashes, system resumes normal operation
+## Database
+Data from the ESP32 microcontroller is collected and stored in a local SQLite database hosted on a Raspberry Pi.
 
 ## 🚀 Getting Started
 ### Prerequisites
