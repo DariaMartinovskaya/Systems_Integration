@@ -2,7 +2,7 @@ import json
 import sqlite3
 from paho.mqtt import client as mqtt_client
 
-mqtt_broker = '192.168.0.127'  # поменяй на IP своего брокера
+mqtt_broker = '192.168.0.127'  
 mqtt_port = 1883
 mqtt_topic = 'esp32/sensors'
 client_id = 'mqtt_sqlite_client'
