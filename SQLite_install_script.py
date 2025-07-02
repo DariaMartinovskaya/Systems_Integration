@@ -31,6 +31,8 @@ def init_db():
     conn.close()
 
 def insert_data(data):
+    SELECT * FROM sensor_data ORDER BY timestamp DESC LIMIT 5;
+    
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
     cursor.execute('''
