@@ -215,3 +215,10 @@ mosquitto_sub -t esp32/sensors -v
 - In terminal via mosquitto_sub
 - In Node-RED dashboard (http://192.168.0.127:1880/ui)
 - At ESP32 IP /data
+
+8. Connecting to motorcycle 
+
+To verify the real-world applicability of the system, the ESP32-based motion monitoring setup was installed directly on a motorcycle engine. Connection to the engine was achieved through a custom mounting configuration using a converter interface and metallic terminal clamps as shown on Figure below, which were adapted to provide reliable contact with the motorcycle’s engine body as shown on Figure below. These clamps ensured mechanical stability and electrical insulation where necessary, without interfering with the normal operation of the vehicle.
+
+![Converter adopted with metallic terminal clamps]()
+![System connected to the motorcycle’s engine body]()
