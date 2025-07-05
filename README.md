@@ -220,5 +220,5 @@ mosquitto_sub -t esp32/sensors -v
 
 To verify the real-world applicability of the system, the ESP32-based motion monitoring setup was installed directly on a motorcycle engine. Connection to the engine was achieved through a custom mounting configuration using a converter interface and metallic terminal clamps as shown on Figure below, which were adapted to provide reliable contact with the motorcycle’s engine body as shown on Figure below. These clamps ensured mechanical stability and electrical insulation where necessary, without interfering with the normal operation of the vehicle.
 
-![Converter adopted with metallic terminal clamps]()
+![Converter adopted with metallic terminal clamps](photo_2025-07-05 12.49.23.jpeg)
 ![System connected to the motorcycle’s engine body]()
